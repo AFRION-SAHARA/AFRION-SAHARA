@@ -115,3 +115,4 @@ Please read:
 - Trademark filing timeline + jurisdictions
 - Model naming/versioning scheme (e.g., Sahara-1, Sahara-S, Sahara-Voice)
 - Safety/grounding policy spec + evaluation thresholds
+<!-- CODEOWNERS test -->
