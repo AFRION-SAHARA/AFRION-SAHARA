@@ -1,0 +1,44 @@
+name: Project Zero Sanity Audit
+
+on:
+  pull_request:
+    branches: [main, master]
+  workflow_dispatch:
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Verify Root Policy Files
+        run: |
+          for file in README.md CONTRIBUTING.md GOVERNANCE.md CLA.md SECURITY.md CODE_OF_CONDUCT.md; do
+            if [ ! -f "$file" ]; then
+              echo "CRITICAL: $file is missing!"
+              exit 1
+            fi
+            if [ ! -s "$file" ]; then
+              echo "WARNING: $file is empty!"
+            fi
+          done
+
+      - name: Verify Scaffolding
+        run: |
+          for dir in docs benchmarks scripts; do
+            if [ ! -d "$dir" ]; then
+              echo "CRITICAL: Directory $dir is missing!"
+              exit 1
+            fi
+            if [ ! -f "$dir/README.md" ]; then
+              echo "WARNING: $dir/README.md is missing!"
+            fi
+          done
+
+      - name: Check CODEOWNERS
+        run: |
+          if [ ! -f ".github/CODEOWNERS" ]; then
+            echo "CRITICAL: CODEOWNERS is missing!"
+            exit 1
+          fi
